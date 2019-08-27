@@ -42,6 +42,8 @@ use backup;
 use LWP;
 use MIME::Base64;
 
+my $version = "latest";
+
 sub main {
     my %configuration = config::ReadConfig(); #ok
  
@@ -145,6 +147,7 @@ sub buildData { #OK
 
 	$hostData{'Environment'} = $configuration{'envtype'};
 	$hostData{'Location'} = $configuration{'location'};
+	$hostData{'Version'} = $version;
 
 	#Fill index fields
 	my $hdDatabases = "";

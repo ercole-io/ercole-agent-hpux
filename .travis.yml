@@ -1,0 +1,15 @@
+os: linux
+dist: xenial
+language: perl
+perl:
+  - "5.26"
+
+before_install:
+  - if [ -z ${TRAVIS_TAG} ] || [ ${TRAVIS_TAG} == *-* ]; then export VERSION=latest; else export VERSION=${TRAVIS_TAG}; fi
+  - echo ${TRAVIS_TAG}
+  - echo ${VERSION}
+
+script:
+  - sed 's/"latest"/"${VERSION}"/' main.go > /tmp/main.go
+  - cp /tmp/main.go main.go
+  - tar -C . -cvzf /tmp/ercole-agent-hpux-${VERSION}.tar.gz .
