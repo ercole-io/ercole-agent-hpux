@@ -13,4 +13,6 @@ install:
   -
 
 script:
+  - sed 's/"latest"/"${VERSION}"/' ercole-agent > /tmp/ercole-agent
+  - cp /tmp/ercole-agent ercole-agent
   - tar -C . -cvzf /tmp/ercole-agent-hpux-${VERSION}.tar.gz .
