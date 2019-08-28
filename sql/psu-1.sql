@@ -47,16 +47,16 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
                 (
                         select 
                         case
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 1 THEN TO_DATE('140115','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 2 THEN TO_DATE('140415','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 3 THEN TO_DATE('140714','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 4 THEN TO_DATE('141014','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 5 THEN TO_DATE('150120','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 6 THEN TO_DATE('150414','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 7 THEN TO_DATE('150714','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 8 THEN TO_DATE('151020','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '1' THEN TO_DATE('140115','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '2' THEN TO_DATE('140415','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '3' THEN TO_DATE('140714','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '4' THEN TO_DATE('141014','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '5' THEN TO_DATE('150120','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '6' THEN TO_DATE('150414','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '7' THEN TO_DATE('150714','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '8' THEN TO_DATE('151020','YYMMDD')
                                 ELSE
-                                         TO_DATE(substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1), 'YYMMDD')
+                                         TO_DATE(substr(substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1),1,7), 'YYMMDD')
                         END as PSU_DATE
                         from  registry$history
                         where action_time = (select max(action_time)
@@ -93,25 +93,25 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
             select
              case
                  WHEN COMMENTS = 'BP20' THEN TO_DATE('151015','YYMMDD')
-                 WHEN COMMENTS = 'BP19' THEN TO_DATE('150915','YYMMDD')
-                 WHEN COMMENTS = 'BP18' THEN TO_DATE('150815','YYMMDD')
-                 WHEN COMMENTS = 'BP17' THEN TO_DATE('150715','YYMMDD')
-                 WHEN COMMENTS = 'BP16' THEN TO_DATE('150415','YYMMDD')
-                 WHEN COMMENTS = 'BP15' THEN TO_DATE('150115','YYMMDD')
-                 WHEN COMMENTS = 'BP14' THEN TO_DATE('151214','YYMMDD')
-                 WHEN COMMENTS = 'BP13' THEN TO_DATE('151114','YYMMDD')
-                 WHEN COMMENTS = 'BP12' THEN TO_DATE('151014','YYMMDD')
-                 WHEN COMMENTS = 'BP11' THEN TO_DATE('150914','YYMMDD')
-                 WHEN COMMENTS = 'BP10' THEN TO_DATE('150814','YYMMDD')
-                 WHEN COMMENTS = 'BP9'  THEN TO_DATE('150714','YYMMDD')
-                 WHEN COMMENTS = 'BP8'  THEN TO_DATE('150614','YYMMDD')
-                 WHEN COMMENTS = 'BP7'  THEN TO_DATE('150514','YYMMDD')
-                 WHEN COMMENTS = 'BP6'  THEN TO_DATE('150414','YYMMDD')
-                 WHEN COMMENTS = 'BP5'  THEN TO_DATE('150314','YYMMDD')
-                 WHEN COMMENTS = 'BP4'  THEN TO_DATE('150214','YYMMDD')
-                 WHEN COMMENTS = 'BP3'  THEN TO_DATE('150114','YYMMDD')
-                 WHEN COMMENTS = 'BP2'  THEN TO_DATE('151213','YYMMDD')
-                 WHEN COMMENTS = 'BP1'  THEN TO_DATE('151113','YYMMDD')
+				 WHEN COMMENTS = 'BP19' THEN TO_DATE('150915','YYMMDD')
+				 WHEN COMMENTS = 'BP18' THEN TO_DATE('150815','YYMMDD')
+				 WHEN COMMENTS = 'BP17' THEN TO_DATE('150715','YYMMDD')
+				 WHEN COMMENTS = 'BP16' THEN TO_DATE('150415','YYMMDD')
+				 WHEN COMMENTS = 'BP15' THEN TO_DATE('150115','YYMMDD')
+				 WHEN COMMENTS = 'BP14' THEN TO_DATE('151214','YYMMDD')
+				 WHEN COMMENTS = 'BP13' THEN TO_DATE('151114','YYMMDD')
+				 WHEN COMMENTS = 'BP12' THEN TO_DATE('151014','YYMMDD')
+				 WHEN COMMENTS = 'BP11' THEN TO_DATE('150914','YYMMDD')
+				 WHEN COMMENTS = 'BP10' THEN TO_DATE('150814','YYMMDD')
+				 WHEN COMMENTS = 'BP9'  THEN TO_DATE('150714','YYMMDD')
+				 WHEN COMMENTS = 'BP8'  THEN TO_DATE('150614','YYMMDD')
+				 WHEN COMMENTS = 'BP7'  THEN TO_DATE('150514','YYMMDD')
+				 WHEN COMMENTS = 'BP6'  THEN TO_DATE('150414','YYMMDD')
+				 WHEN COMMENTS = 'BP5'  THEN TO_DATE('150314','YYMMDD')
+				 WHEN COMMENTS = 'BP4'  THEN TO_DATE('150214','YYMMDD')
+				 WHEN COMMENTS = 'BP3'  THEN TO_DATE('150114','YYMMDD')
+				 WHEN COMMENTS = 'BP2'  THEN TO_DATE('151213','YYMMDD')
+				 WHEN COMMENTS = 'BP1'  THEN TO_DATE('151113','YYMMDD')
                  ELSE
                     TO_DATE(substr(COMMENTS,3,7), 'YYMMDD')
              END as PSU_DATE
@@ -150,21 +150,21 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
                 (
                         select 
                         case
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 15 THEN TO_DATE('150714','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 14 THEN TO_DATE('150414','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 13 THEN TO_DATE('150120','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 12 THEN TO_DATE('141014','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 11 THEN TO_DATE('140717','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 10 THEN TO_DATE('140415','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 9  THEN TO_DATE('140114','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 8  THEN TO_DATE('131015','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 7  THEN TO_DATE('130716','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 6  THEN TO_DATE('130417','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 5  THEN TO_DATE('130114','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 4  THEN TO_DATE('121015','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 3  THEN TO_DATE('120716','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 2  THEN TO_DATE('120416','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 1  THEN TO_DATE('120116','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '15' THEN TO_DATE('150714','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '14' THEN TO_DATE('150414','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '13' THEN TO_DATE('150120','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '12' THEN TO_DATE('141014','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '11' THEN TO_DATE('140717','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '10' THEN TO_DATE('140415','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '9'  THEN TO_DATE('140114','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '8'  THEN TO_DATE('131015','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '7'  THEN TO_DATE('130716','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '6'  THEN TO_DATE('130417','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '5'  THEN TO_DATE('130114','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '4'  THEN TO_DATE('121015','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '3'  THEN TO_DATE('120716','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '2'  THEN TO_DATE('120416','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '1'  THEN TO_DATE('120116','YYMMDD')
                         END as PSU_DATE
                         from  registry$history
                         where action_time = (select max(action_time)
@@ -267,18 +267,18 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
                 (
                         select 
                         case
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 1 THEN TO_DATE('110118','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 2 THEN TO_DATE('110512','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 3 THEN TO_DATE('110811','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 4 THEN TO_DATE('111017','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 5 THEN TO_DATE('120120','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 6 THEN TO_DATE('120417','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 7 THEN TO_DATE('120719','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 8 THEN TO_DATE('121015','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 9 THEN TO_DATE('130114','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 10 THEN TO_DATE('130417','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 11 THEN TO_DATE('130716','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 12 THEN TO_DATE('131015','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '1' THEN TO_DATE('110118','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '2' THEN TO_DATE('110512','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '3' THEN TO_DATE('110811','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '4' THEN TO_DATE('111017','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '5' THEN TO_DATE('120120','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '6' THEN TO_DATE('120417','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '7' THEN TO_DATE('120719','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '8' THEN TO_DATE('121015','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '9' THEN TO_DATE('130114','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '10' THEN TO_DATE('130417','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '11' THEN TO_DATE('130716','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '12' THEN TO_DATE('131015','YYMMDD')
                         END as PSU_DATE
                         from  registry$history
                          where action_time = (select max(action_time)
@@ -358,7 +358,7 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
          )
          select distinct COMMENTS as DESCRIPTION,PSU_DATE,STATUS
          into :DESCRIPTION,:PSU_DATE,:STATUS
-         from PSU,DATA,STATE;                               
+         from PSU,DATA,STATE;								
    ELSIF ( :EXTENDVERSION = '11.2.0.1.0' AND :EXIST > 0  AND :BP not like '%BP%') THEN 
         with PSU as
                 (
@@ -374,12 +374,12 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
                 (
                         select 
                         case
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 1 THEN TO_DATE('100413','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 2 THEN TO_DATE('100713','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 3 THEN TO_DATE('101012','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 4 THEN TO_DATE('110118','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 5 THEN TO_DATE('110418','YYMMDD')
-                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = 6 THEN TO_DATE('110718','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '1' THEN TO_DATE('100413','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '2' THEN TO_DATE('100713','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '3' THEN TO_DATE('101012','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '4' THEN TO_DATE('110118','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '5' THEN TO_DATE('110418','YYMMDD')
+                                WHEN substr(COMMENTS, - instr(reverse(COMMENTS), '.') + 1) = '6' THEN TO_DATE('110718','YYMMDD')
                         END as PSU_DATE
                         from  registry$history
                         where action_time = (select max(action_time)
@@ -448,7 +448,7 @@ select * into :BP from (select COMMENTS from  registry$history order by action_t
          )
          select distinct COMMENTS as DESCRIPTION,PSU_DATE,STATUS
          into :DESCRIPTION,:PSU_DATE,:STATUS
-         from PSU,DATA,STATE;                                       
+         from PSU,DATA,STATE;										
     ELSE
         select 'N/A','N/A','N/A' 
                 into :DESCRIPTION,:PSU_DATE,:STATUS 
