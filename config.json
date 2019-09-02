@@ -7,5 +7,6 @@
     "serverpsw": "password",
     "frequency": 24,
     "forcestats": true,
-    "EnableServerValidation": false
+    "EnableServerValidation": false,
+    "oratab": "/etc/oratab"
 }

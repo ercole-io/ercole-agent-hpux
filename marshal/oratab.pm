@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/perl
 
 # Copyright (c) 2019 Sorint.lab S.p.A.
 #
@@ -15,11 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ORATAB=$1
+package marshal;
 
-if [ -z "$ORATAB" ]; then
-  echo "Missing ORATAB parameter"
-  exit 1
-fi
+use strict;
+use warnings;
+use diagnostics;
+use lib "./marshal";
+use common;
 
-grep -o '^[A-Za-Z0-9].*\:\/' $ORATAB|awk -F ':' '{print $1}'
+# Licenses returns a list of licenses from the output of the licenses fetcher command.
+sub Oratab { 
+    no warnings 'uninitialized';
+    my $cmdOutput = shift;
+
+	my @dbs;
+    for my $c (split /\n/, $cmdOutput) {
+        my $line = $c;
+        push(@dbs, $line);
+    }
+    return @dbs;
+}
+
+1;

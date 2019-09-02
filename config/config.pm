@@ -67,6 +67,10 @@ sub ReadConfig{
         $config{$key} = $value;
     }
     
+    if (not($config{"oratab"})){
+        $config{"oratab"} = "/etc/oratab";
+    }
+
     return %config;
 }
 
