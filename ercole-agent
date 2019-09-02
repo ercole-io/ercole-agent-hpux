@@ -29,6 +29,7 @@ use lib "./marshal";
 use common;
 use host;
 use filesystems;
+use oratab;
 use database;
 use tablespaces;
 use schemas;
@@ -65,8 +66,10 @@ sub buildData { #OK
     $out = fetcher("filesystem", "", "X"); #ok
     my @filesystems = marshal::Filesystems($out); #array of hashes' address, ok
 
-    my @dbs = readOratab(); #1
-	
+
+    $out = fetcher("oratab", $configuration{'oratab'}, "X"); #ok
+    my @dbs = marshal::Oratab($out); #array of hashes' address, ok
+
 	my @databases;
 
     foreach my $db (@dbs){
@@ -253,6 +256,7 @@ sub fetchDbStatus {
 
 sub fetchLicenses {
     no warnings 'uninitialized';
+
     my ($sid, $hostType, $dbVersion) = @_;
     
 	marshal::logPrintln("Fetching license: ".$sid);
@@ -261,20 +265,6 @@ sub fetchLicenses {
     my $cmd = $baseDir."/fetch/license";
     my $out = qx/$cmd $sid $hostType $dbVersion/;
     return $out;
-}
-
-sub readOratab {
-    my $baseDir = config::getBaseDir();
-    
-    my $cmd = $baseDir."/fetch/oratab";
-    my $out = qx/$cmd/;
-    
-	my @dbs;
-    for my $c (split /\n/, $out) {
-        my $line = $c;
-        push(@dbs, $line);
-    }
-    return @dbs;
 }
 
 main();
