@@ -73,10 +73,11 @@ sub buildData { #OK
 	my @databases;
 
     foreach my $db (@dbs){
-        my $dbStatus = fetchDbStatus($db, "X"); #OPEN
-        
+        my %dbEntry = %$db;
+        my $dbStatus = fetchDbStatus($dbEntry{"DBName"}, $dbEntry{"OracleHome"}); #OPEN
+
         if ($dbStatus eq "OPEN") {
-			my $outVersion = fetcher("dbversion", $db, "X"); #$db=XE, #outVersion 18.0.0.0
+			my $outVersion = fetcher("dbversion", $dbEntry{"DBName"}, $dbEntry{"OracleHome"}); #$db=XE, #outVersion 18.0.0.0
             my $prefix = substr $outVersion, 0, 2; 
 			
 			my $dbVersion = "12";
@@ -94,40 +95,40 @@ sub buildData { #OK
 			# 	fetcher("stats", $db, $dbVersion); #Update db stats
 			# }
 
-			$out = fetcher("db", $db, $dbVersion); 
+			$out = fetcher("db", $dbEntry{"DBName"}, $dbEntry{"OracleHome"}); 
 			my %database = marshal::Database($out); #OK 
 
-			$out = fetcher("tablespace", $db, $dbVersion);
+			$out = fetcher("tablespace", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			$database{'Tablespaces'} = marshal::Tablespaces($out); #OK
 			
-			$out = fetcher("schema", $db, $dbVersion);
+			$out = fetcher("schema", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			$database{'Schemas'} = marshal::Schemas($out); #OK
 
-			$out = fetcher("patch", $db, $dbVersion); #empty, OK
+			$out = fetcher("patch", $dbEntry{"DBName"}, $dbVersion, $dbEntry{"OracleHome"}); #empty, OK
 			$database{'Patches'} = marshal::Patches($out); #OK
 
-			$out = fetcher("feature", $db, $dbVersion);
+			$out = fetcher("feature", $dbEntry{"DBName"}, $dbVersion, $dbEntry{"OracleHome"});
 			$database{'Features'} = marshal::Features($out); #OK 
 
-			$out = fetchLicenses($db, $host{'Type'}, $dbVersion);
+			$out = fetchLicenses($dbEntry{"DBName"}, $dbVersion, $host{'Type'}, $dbEntry{"OracleHome"});
 			$database{'Licenses'} = marshal::Licenses($out); #OK
 			
-			$out = fetcher("addm", $db, $dbVersion);
+			$out = fetcher("addm", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			$database{'ADDMs'} = marshal::Addms($out); #OK 
 
-			$out = fetcher("segmentadvisor", $db, $dbVersion);
+			$out = fetcher("segmentadvisor", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			$database{'SegmentAdvisors'} = marshal::SegmentAdvisor($out); #OK 
 
-			$out = fetcher("psu", $db, $dbVersion);
+			$out = fetcher("psu", $dbEntry{"DBName"}, $dbVersion, $dbEntry{"OracleHome"});
 			$database{'LastPSUs'} = marshal::PSU($out); #OK 
 
-			$out = fetcher("backup", $db, $dbVersion);
+			$out = fetcher("backup", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			$database{'Backups'} = marshal::Backups($out); #OK 
 
 			push (@databases, {%database}); #OK
 			
 		} elsif ($dbStatus eq "MOUNTED") {
-			$out = fetcher("dbmounted", $db, "X");
+			$out = fetcher("dbmounted", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
 			my %database = marshal::Database($out); #should work, test with db not open
 			push (@databases, {%database}); #should work, test with db not open
 		}
@@ -159,7 +160,7 @@ sub buildData { #OK
 	foreach my $i (@databases){
 		no warnings 'uninitialized';
 		my %db = %$i;
-		
+
 		$hdDatabases = $hdDatabases . $db{'Name'} . " ";
 		
 		my $temp = $db{'Schemas'};
@@ -231,13 +232,13 @@ sub sendData { #to test if success
 
 sub fetcher {
     no warnings 'uninitialized';
-    my ($fetcherName, $sid, $dbVersion) = @_;
+    my ($fetcherName, $param1, $param2, $param3) = @_;
 
-	marshal::logPrintln("Fetching ".$fetcherName.": ".$sid);
+	marshal::logPrintln("Fetching ".$fetcherName.": ".$param1." ".$param2." ".$param3);
     my $baseDir = config::getBaseDir();
     	
     my $cmd = $baseDir."/fetch/".$fetcherName;
-    my $out = qx/$cmd $sid $dbVersion/; #cmd execution
+    my $out = qx/$cmd $param1 $param2 $param3/; #cmd execution
 
 	return $out;
 }

@@ -28,12 +28,19 @@ sub Oratab {
     no warnings 'uninitialized';
     my $cmdOutput = shift;
 
-	my @dbs;
-    for my $c (split /\n/, $cmdOutput) {
-        my $line = $c;
-        push(@dbs, $line);
+	my @oratab;
+    for my $line (split /\n/, $cmdOutput) {
+        my ($dbname, $oraclehome) = split /:/, $line;
+        my %oratabEntry;
+        $dbname=trim($dbname);
+        $oraclehome=trim($oraclehome);
+
+        $oratabEntry{'DBName'} = $dbname;
+        $oratabEntry{'OracleHome'} = $oraclehome;
+
+        push(@oratab, {%oratabEntry});
     }
-    return @dbs;
+    return @oratab;
 }
 
 1;
