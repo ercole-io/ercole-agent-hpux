@@ -44,7 +44,7 @@ sub Patches {
         $patch{'Action'} = $action;
         $patch{'Description'} = $description;
         $patch{'Date'} = $date;
-
+        
         push(@patches, {%patch});
     }
 
