@@ -157,6 +157,8 @@ sub buildData { #OK
 
 	$hostData{'Environment'} = $configuration{'envtype'};
 	$hostData{'Location'} = $configuration{'location'};
+	$hostData{'HostType'} = $configuration{'hosttype'};
+	
 	$hostData{'Version'} = $version;
 
 	#Fill index fields
