@@ -108,7 +108,13 @@ sub buildData { #OK
 			$database{'Patches'} = marshal::Patches($out); #OK
 
 			$out = fetcher("feature", $dbEntry{"DBName"}, $dbVersion, $dbEntry{"OracleHome"});
-			$database{'Features'} = marshal::Features($out); #OK 
+			if ($out =~ m/deadlocked on readable physical standby/) {
+				marshal::logPrintln("Detected bug active dataguard 2311894.1!");
+				$database{'Features'}=();
+			} else {
+				$database{'Features'} = marshal::Features($out); #OK 
+			}
+
 
 			$out = fetchLicenses($dbEntry{"DBName"}, $dbVersion, $host{'Type'}, $dbEntry{"OracleHome"});
 			$database{'Licenses'} = marshal::Licenses($out); #OK
