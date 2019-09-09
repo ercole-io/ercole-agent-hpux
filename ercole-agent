@@ -44,6 +44,8 @@ use LWP;
 use MIME::Base64;
 
 my $version = "latest";
+my $hostDataSchemaVersion = 1;
+
 
 sub main {
     my %configuration = config::ReadConfig(); #ok
@@ -158,8 +160,8 @@ sub buildData { #OK
 	$hostData{'Environment'} = $configuration{'envtype'};
 	$hostData{'Location'} = $configuration{'location'};
 	$hostData{'HostType'} = $configuration{'hosttype'};
-	
 	$hostData{'Version'} = $version;
+	$hostData{'HostDataSchemaVersion'} = $hostDataSchemaVersion;
 
 	#Fill index fields
 	my $hdDatabases = "";
