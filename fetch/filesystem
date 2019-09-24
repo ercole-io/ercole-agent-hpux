@@ -15,4 +15,4 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-df -PhT | sed 1d | sort -k7
+bdf | sed 1d | awk '{ printf "%s\t\t???\t\t%fG\t\t%fG\t\t%fG\t\t%s\t\t%s\n", $1, $2/1024/1024, $3/1024/1024, $4/1024/1024, $5, $6 }'
