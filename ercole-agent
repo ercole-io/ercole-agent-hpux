@@ -22,6 +22,8 @@ use warnings;
 use diagnostics;
 
 use lib "./lib/JSON";
+use lib "./lib/HTTP";
+
 use PP;
 use lib "./config";
 use config;
