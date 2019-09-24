@@ -207,9 +207,9 @@ sub sendData { #to test if success
 	my $client = LWP::UserAgent->new;
 
 	# Disable certificate validation if enableServerValidation is false
-	if ($configuration{'EnableServerValidation'} eq "false"){
-		$client->ssl_opts(verify_hostname => 0);	
-	}
+	# if ($configuration{'EnableServerValidation'} eq "false"){
+	# 	$client->ssl_opts(verify_hostname => 0);	
+	# }
 
 	my $auth = $configuration{'serverusr'}.":".$configuration{'serverpsw'};
 	my $authEnc = encode_base64($auth);

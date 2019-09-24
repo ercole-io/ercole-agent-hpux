@@ -79,6 +79,8 @@ sub Host {
 
             if ($key eq "CPUCores" || $key eq "CPUThreads" || $key eq "Socket" || $key eq "MemoryTotal" || $key eq "SwapTotal"){
                 $value = parseInt($value);
+            } elsif ($key eq "OracleCluster" || $key eq "VeritasCluster" || $key eq "SunCluster" || $key eq "Virtual"){
+                $value = parseBool($value);
             }
             
             $host{$key} = $value;
