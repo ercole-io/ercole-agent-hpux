@@ -28,8 +28,7 @@ use common;
 sub Host {
     no warnings 'uninitialized';
     my $cmdOutput = shift;
-
-    my $lines = "{";
+    my %host;
 
     for my $c (split /\n/, $cmdOutput) {
         my $line = $c;
@@ -56,32 +55,14 @@ sub Host {
             $key = "SunCluster";
         } 
         $value=trim($value);
-        $lines.= marshalKey($key).marshalValue($value).", ";
-    }
-    
-    $lines .= "}";
-    
-    $lines =~ s/, }/}/g;
-    $lines =~ s/[{}]//g;
-    $lines =~ s/, /\n/g;
-    $lines =~ s/:/====>/g;
-    $lines =~ s/"//g;
-    
-    my @values = split /\n/, $lines;
-    
-    my %host;
-   
-    foreach my $c (@values){
-        my $line = $c;
-        my ($key, $value) = split /====>/, $line;
-            $key=trim($key);
-            $value=trim($value);
 
-            if ($key eq "CPUCores" || $key eq "CPUThreads" || $key eq "Socket" || $key eq "MemoryTotal" || $key eq "SwapTotal"){
-                $value = parseInt($value);
-            }
-            
-            $host{$key} = $value;
+        if ($key eq "CPUCores" || $key eq "CPUThreads" || $key eq "Socket" || $key eq "MemoryTotal" || $key eq "SwapTotal"){
+            $value = parseInt($value);
+        } elsif ($key eq "OracleCluster" || $key eq "VeritasCluster" || $key eq "SunCluster" || $key eq "Virtual"){
+            $value = parseBool($value);
+        }
+
+        $host{$key} = $value;
     }
 
     return %host;

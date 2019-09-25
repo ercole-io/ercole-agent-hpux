@@ -15,38 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-OPERATING_SYSTEM=LINUX
-LICENCING_CPU_CORES=$(grep processor /proc/cpuinfo | wc -l)
 HOSTNAME=$(hostname)
-CPU_MODEL=$(grep "model name" /proc/cpuinfo | sort -u | awk -F ': ' '{print $2}')
-CPU_THREAD=$(grep processor /proc/cpuinfo | wc -l)
-if [[ $CPU_THREAD = '1' ]]; then
-  CPU_CORES=1
-else 
-  CPU_CORES=$(($CPU_THREAD / 2))
-fi
-if [[ $VIRTUAL = 'Y' ]]; then
-  SOCKET=1
-else
-  SOCKET=$(cat /proc/cpuinfo |grep -i "physical id" |sort -n|uniq|wc -l)
-fi 
 KERNEL=$(uname -r)
-OS=$(cat /etc/redhat-release)
-if [[ $? != 0 ]]; then
-  OS=$(cat /etc/SuSE-release| head -1)
+OS=$(swlist | grep HPUX11i | awk '{ print $1 }')
+CPU_MODEL=$(/usr/contrib/bin/machinfo |grep -i processor| head -1)
+SWP_TOTAL=$(($(swapinfo -M| tail -1| awk '{print $3}')/1024/1024))
+MEM_TOTAL=$(/usr/contrib/bin/machinfo | grep "Memory"| awk '{print $4}'| awk  -F "(" '{print $2}')
+
+if [ "$(model | grep -i virtual | wc -l)" -gt 0 ]; then
+  CPU_THREAD=$(ioscan -fnk | grep proc | wc -l)
+  CPU_CORES=$(($CPU_THREAD/2))
+  SOCKET=1
+else 
+  DIVISO=$(/usr/contrib/bin/machinfo | grep -i processor | grep logical | awk '{print $4}' | awk -F "(" '{print $2}')
+  CPU_THREAD=$(/usr/contrib/bin/machinfo | grep -i processor | grep logical | awk '{print $1}')
+  CPU_CORES=$(($CPU_THREAD/2))
+  SOCKET=$(($CPU_THREAD / $DIVISO))
 fi
-MEM_TOTAL=$(echo "$(($(free -k | grep Mem | awk -F ' ' '{print $2}')/1024/1024))")
-SWP_TOTAL=$(echo "$(($(free -k | grep Swap | awk -F ' ' '{print $2}')/1024/1024))")
 
 CHECK_SUN_CLUSTER=$(ps -ef | grep -v grep | grep rpc.pmfd|wc -l)
-if [ $CHECK_SUN_CLUSTER = 1 ]; then
+if [ "$CHECK_SUN_CLUSTER" = 1 ]; then
   SUN_CLUSTER=Y
 else
   SUN_CLUSTER=N
 fi
 
 CHECK_VERITAS_CLUSTER=$(ps -ef | grep -v grep | grep had|wc -l)
-if [ $CHECK_VERITAS_CLUSTER = 1 ]; then
+if [ "$CHECK_VERITAS_CLUSTER" = 1 ]; then
   VERITAS_CLUSTER=Y
 else
   VERITAS_CLUSTER=N
@@ -59,30 +54,21 @@ else
   ORACLE_CLUSTER=N
 fi
 
-
-CHECK_TYPE_SERVER_OVM_DMESG=$(dmesg | grep OVM | wc -l)
-CHECK_TYPE_SERVER_OVM_LOG=$(grep -i ovm /var/log/dmesg | wc -l)
 CHECK_TYPE_SERVER_VMWARE=$(dmesg | grep VMware | wc -l)
-# CHECK_TYPE_SERVER_AIX=$(uname -L | awk '{print $1}')
-# TODO: HPUX has a specific server type, see original script
-CHECK_TYPE_SERVER_HPUX=0
-CHECK_TYPE_SERVER_HYPERVISOR=$(grep ^flags /proc/cpuinfo | grep hypervisor | wc -l)
+CHECK_TYPE_SERVER_HPVIRT=$(model| grep -i virtual|wc -l)
 
-if [ "$CHECK_TYPE_SERVER_OVM_DMESG" -gt 0 ] || [ "$CHECK_TYPE_SERVER_OVM_LOG" -gt 0 ]; then
-  TYPE=OVM
-  VIRTUAL=Y
-elif [ $CHECK_TYPE_SERVER_VMWARE -gt 0 ]; then
+if [ "$CHECK_TYPE_SERVER_VMWARE" -gt 0 ]; then
   TYPE=VMWARE
   VIRTUAL=Y
-elif [ $CHECK_TYPE_SERVER_HYPERVISOR -gt 0 ]; then
-  TYPE=VMOTHER
+elif [ "$CHECK_TYPE_SERVER_HPVIRT" -gt 0 ]; then
+  TYPE=HPVRT
   VIRTUAL=Y
 else
   TYPE=PH
   VIRTUAL=N
 fi
 
-echo -n "hostname: $HOSTNAME
+echo "hostname: $HOSTNAME
 cpumodel: $CPU_MODEL
 cputhreads: $CPU_THREAD
 cpucores: $CPU_CORES
