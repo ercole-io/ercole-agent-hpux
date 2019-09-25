@@ -116,7 +116,7 @@ sub buildData { #OK
 				marshal::logPrintln("Detected bug active dataguard 2311894.1!");
 				$database{'Features'}=();
 			} elsif ($out =~ m/ORA-01555: snapshot too old: rollback segment number/) {
-				marshal::logPrintln("Error on active dataguard ORA-01555!");
+				marshal::logPrintln("Detected error on active dataguard ORA-01555!");
 				$database{'Features'}=();
 			} else {
 				$database{'Features'} = marshal::Features($out); #OK 
