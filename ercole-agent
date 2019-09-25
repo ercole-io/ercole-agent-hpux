@@ -115,6 +115,9 @@ sub buildData { #OK
 			if ($out =~ m/deadlocked on readable physical standby/) {
 				marshal::logPrintln("Detected bug active dataguard 2311894.1!");
 				$database{'Features'}=();
+			} elsif ($out =~ m/ORA-01555: snapshot too old: rollback segment number/) {
+				marshal::logPrintln("Error on active dataguard ORA-01555!");
+				$database{'Features'}=();
 			} else {
 				$database{'Features'} = marshal::Features($out); #OK 
 			}
