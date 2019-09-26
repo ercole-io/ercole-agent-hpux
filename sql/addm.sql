@@ -17,7 +17,7 @@ set lines 8000 pages 0 feedback off verify off
 set colsep "|||"
 set serverout on
 set autoprint on
-col HOST_NAME for a30
+col HOST_NAME for a60
 col TASK_NAME for a15 
 col "BENEFIT_%" for 999.99
 col FINDING for a600 
@@ -145,12 +145,11 @@ and trunc(s.END_INTERVAL_TIME) >= trunc(sysdate - &&num_days) ;
         END IF;      
      END IF;     
   END IF;
-
-/* Delete ADDM TASK for instance */
-exec dbms_addm.delete('ERCOLE_TASK');
-
 END IF;
 END;
 /
+
+/* Delete ADDM TASK for instance */
+exec dbms_addm.delete('ERCOLE_TASK');
 
 exit
