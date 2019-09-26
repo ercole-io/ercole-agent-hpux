@@ -39,4 +39,5 @@ exit
 EOF
 )
 
-echo -n $DB_STATUS
+echo $DB_STATUS
+

@@ -39,4 +39,4 @@ exit
 EOF
 )
 
-echo -n $DB_VERSION
+echo $DB_VERSION

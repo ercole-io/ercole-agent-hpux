@@ -17,7 +17,8 @@
 
 HOSTNAME=$(hostname)
 KERNEL=$(uname -r)
-OS=$(swlist | grep HPUX11i | awk '{ print $1 }')
+
+OS=$(/usr/sbin/swlist | grep HPUX11i | awk '{ print $1 }')
 CPU_MODEL=$(/usr/contrib/bin/machinfo |grep -i processor| head -1)
 SWP_TOTAL=$(($(swapinfo -M| tail -1| awk '{print $3}')/1024/1024))
 MEM_TOTAL=$(/usr/contrib/bin/machinfo | grep "Memory"| awk '{print $4}'| awk  -F "(" '{print $2}')
