@@ -47,7 +47,7 @@ use MIME::Base64;
 use common;
  
 my $version = "latest";
-my $hostDataSchemaVersion = 1;
+my $hostDataSchemaVersion = 3;
 
 
 sub main {
