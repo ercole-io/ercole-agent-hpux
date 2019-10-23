@@ -49,9 +49,12 @@ export ORACLE_SID=$SID
 export ORACLE_HOME=$HOME
 export PATH=$HOME/bin:$PATH
 
+
+S_VERSION="select (case when UPPER(banner) like '%EXTREME%' then 'EXE' when UPPER(banner) like '%ENTERPRISE%' then 'ENT' else 'STD' end) as versione from v\$version where rownum=1;"
+
 DB_VERSION=$(sqlplus -S / as sysdba << EOF
 set pages 0 feedback off
-select (case when UPPER(banner) like '%EXTREME%' then 'EXE' when UPPER(banner) like '%ENTERPRISE%' then 'ENT' else 'STD' end) as versione from v\$version where rownum=1;
+${S_VERSION}
 exit
 EOF
 )
@@ -65,7 +68,7 @@ EOF
 
 DB_ONE=x$(sqlplus -S / as sysdba << EOF
 set pages 0 feedback off
-HOST srvctl config database -d $DB_NAME |grep -o One
+HOST srvctl config database -d $DB_NAME |grep -i One
 exit
 EOF
 )
@@ -106,24 +109,24 @@ then
 fi
 
 
-if [[ $DB_VERSION == 'EXE' ]]; then
+if [[ $DB_VERSION = 'EXE' ]]; then
   echo "Oracle EXE; $NUM_LICENSE;"
 else
   echo "Oracle EXE;;"
 fi
-if [[ $DB_VERSION == 'ENT' ]]; then
+if [[ $DB_VERSION = 'ENT' ]]; then
   echo "Oracle ENT; $NUM_LICENSE;"
 else
   echo "Oracle ENT;;"
 fi
-if [[ $DB_VERSION == 'STD' ]]; then
+if [[ $DB_VERSION = 'STD' ]]; then
   echo "Oracle STD; $NUM_LICENSE;"
 else
   echo "Oracle STD;;"
 fi
 
 
-if [ $DBV == "10" ]; then
+if [ $DBV = "10" ]; then
   sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/license-10.sql $CPU_THREAD $FACTOR
 else
   sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/license.sql $CPU_THREAD $FACTOR $DB_ONE
