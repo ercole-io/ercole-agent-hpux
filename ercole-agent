@@ -47,7 +47,7 @@ use MIME::Base64;
 use common;
  
 my $version = "latest";
-my $hostDataSchemaVersion = 1;
+my $hostDataSchemaVersion = 3;
 
 
 sub main {
@@ -124,7 +124,7 @@ sub buildData { #OK
 			}
 
 
-			$out = fetchLicenses($dbEntry{"DBName"}, $dbVersion, $host{'Type'}, $dbEntry{"OracleHome"});
+			$out = fetcher("license",$dbEntry{"DBName"}, $dbVersion, $host{'Type'}, $dbEntry{"OracleHome"});
 			$database{'Licenses'} = marshal::Licenses($out); #OK
 			
 			$out = fetcher("addm", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
@@ -248,13 +248,13 @@ sub sendData { #to test if success
 
 sub fetcher {
     no warnings 'uninitialized';
-    my ($fetcherName, $param1, $param2, $param3) = @_;
+    my ($fetcherName, $param1, $param2, $param3, $param4) = @_;
 
-	marshal::logPrintln("Fetching ".$fetcherName.": ".$param1." ".$param2." ".$param3);
+	marshal::logPrintln("Fetching ".$fetcherName.": ".$param1." ".$param2." ".$param3." ".$param4);
     my $baseDir = config::getBaseDir();
     	
     my $cmd = $baseDir."/fetch/".$fetcherName;
-    my $out = qx/$cmd $param1 $param2 $param3/; #cmd execution
+    my $out = qx/$cmd $param1 $param2 $param3 $param4/; #cmd execution
 
 	return $out;
 }
@@ -268,19 +268,6 @@ sub fetchDbStatus {
 	my $cmd = $baseDir."/fetch/dbstatus";
     my $out = qx/$cmd $sid $dbVersion/ or die "UNREACHABLE"; #cmd execution
 
-    return $out;
-}
-
-sub fetchLicenses {
-    no warnings 'uninitialized';
-
-    my ($sid, $hostType, $dbVersion) = @_;
-    
-	marshal::logPrintln("Fetching license: ".$sid);
-    
-	my $baseDir = config::getBaseDir();
-    my $cmd = $baseDir."/fetch/license";
-    my $out = qx/$cmd $sid $hostType $dbVersion/;
     return $out;
 }
 

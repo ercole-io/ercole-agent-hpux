@@ -49,7 +49,6 @@ export ORACLE_SID=$SID
 export ORACLE_HOME=$HOME
 export PATH=$HOME/bin:$PATH
 
-
 S_VERSION="select (case when UPPER(banner) like '%EXTREME%' then 'EXE' when UPPER(banner) like '%ENTERPRISE%' then 'ENT' else 'STD' end) as versione from v\$version where rownum=1;"
 
 DB_VERSION=$(sqlplus -S / as sysdba << EOF
@@ -65,7 +64,6 @@ select name from v\$database;
 exit
 EOF
 )
-
 DB_ONE=x$(sqlplus -S / as sysdba << EOF
 set pages 0 feedback off
 HOST srvctl config database -d $DB_NAME |grep -i One
@@ -106,7 +104,6 @@ then
     NUM_LICENSE=$SOKET
     FACTOR=$SOKET
   fi
-fi
 
 
 if [[ $DB_VERSION = 'EXE' ]]; then
@@ -125,9 +122,9 @@ else
   echo "Oracle STD;;"
 fi
 
-
 if [ $DBV = "10" ]; then
   sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/license-10.sql $CPU_THREAD $FACTOR
 else
   sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/license.sql $CPU_THREAD $FACTOR $DB_ONE
 fi
+
