@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/ksh
 
 # Copyright (c) 2019 Sorint.lab S.p.A.
 #
@@ -44,19 +44,20 @@ fi
 ERCOLE_HOME=$(dirname "$0")
 ERCOLE_HOME="$(dirname "$ERCOLE_HOME")"
 
-export ORAENV_ASK=NO 
+export ORAENV_ASK=NO
 export ORACLE_SID=$SID
 export ORACLE_HOME=$HOME
 export PATH=$HOME/bin:$PATH
 
-#DB_VERSION=$(sqlplus -S / as sysdba << EOF
-#set pages 0 feedback off
-#select (case when UPPER(banner) like '%EXTREME%' then 'EXE' when UPPER(banner) like '%ENTERPRISE%' then 'ENT' else 'STD' end) as versione from v\$version where rownum=1;
-#exit
-#EOF
-#)
 
-export DB_VERSION="ENT"
+S_VERSION="select (case when UPPER(banner) like '%EXTREME%' then 'EXE' when UPPER(banner) like '%ENTERPRISE%' then 'ENT' else 'STD' end) as versione from v\$version where rownum=1;"
+
+DB_VERSION=$(sqlplus -S / as sysdba << EOF
+set pages 0 feedback off
+${S_VERSION}
+exit
+EOF
+)
 
 DB_NAME=$(sqlplus -S / as sysdba << EOF
 set pages 0 feedback off
@@ -64,6 +65,7 @@ select name from v\$database;
 exit
 EOF
 )
+
 DB_ONE=x$(sqlplus -S / as sysdba << EOF
 set pages 0 feedback off
 HOST srvctl config database -d $DB_NAME |grep -i One
@@ -73,18 +75,38 @@ EOF
 
 
 
-  VIRTUAL=N
-  DIVISO=$(/usr/contrib/bin/machinfo |grep -i processor| grep logical| awk '{print $4}'| awk -F "(" '{print $2}')
-  CPU_THREAD=$(/usr/contrib/bin/machinfo |grep -i processor| awk '{print $1}')
-  CPU_CORES=$(($CPU_THREAD/2))
-  SOCKET=1
+if [[ "$TYPE" = 'HPVRT' ]]
+then
+   VIRTUAL=Y
+   CPU_THREAD=$(ioscan -fnk|grep proc|wc -l)
+   CPU_CORES=$(($CPU_THREAD/2))
+   SOCKET=1
+
   if [[ $DB_VERSION = 'EXE' || $DB_VERSION = 'ENT' ]]; then
-    NUM_LICENSE=$(echo 0.5*$CPU_THREAD|bc) 
-    FACTOR='0.5'
+    NUM_LICENSE=$(echo 0.5*$CPU_THREAD|bc)
+    FACTOR=0.5
   elif [[ $DB_VERSION = 'STD' ]]; then
     NUM_LICENSE=$SOCKET
     FACTOR=$SOCKET
   fi
+elif [ $TYPE = 'PH' ]
+then
+
+  VIRTUAL=N
+  DIVISO=$(/usr/contrib/bin/machinfo |grep -i processor| grep logical| awk '{print $4}'| awk -F "(" '{print $2}')
+  CPU_THREAD=$(/usr/contrib/bin/machinfo |grep -i processor| grep logical| awk '{print $1}')
+  CPU_CORES=$(($CPU_THREAD/2))
+  SOCKET=$(($CPU_THREAD / $DIVISO))
+
+
+  if [[ $DB_VERSION = 'EXE' || $DB_VERSION = 'ENT' ]]; then
+    NUM_LICENSE=$(echo 0.5*$CPU_THREAD|bc)
+    FACTOR=0.5
+  elif [[ $DB_VERSION = 'STD' ]]; then
+    NUM_LICENSE=$SOKET
+    FACTOR=$SOKET
+  fi
+fi
 
 
 if [[ $DB_VERSION = 'EXE' ]]; then
@@ -102,6 +124,8 @@ if [[ $DB_VERSION = 'STD' ]]; then
 else
   echo "Oracle STD;;"
 fi
+
+
 if [ $DBV = "10" ]; then
   sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/license-10.sql $CPU_THREAD $FACTOR
 else
