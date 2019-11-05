@@ -36,6 +36,7 @@ use database;
 use tablespaces;
 use schemas;
 use features;
+use features2;
 use licenses;
 use patches;
 use addms;
