@@ -72,6 +72,8 @@ sub parseBool {
 
     if ($s eq "Y"){
         $s = $t;
+    } elsif ($s eq "TRUE") {
+        $s = $t;
     } else {
         $s = $f;
     }
