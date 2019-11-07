@@ -29,7 +29,12 @@ alter session set NLS_DATE_FORMAT='YYYY-MM-DD';
 BEGIN
 SELECT DBMS_DB_VERSION.VERSION || '.' || DBMS_DB_VERSION.RELEASE into :VERSION FROM v$instance;
 SELECT version into :EXTENDVERSION from v$instance;
-select count(*) into :EXIST  from  registry$history;
+SELECT count(*) INTO :EXIST
+FROM registry$history
+WHERE COMMENTS LIKE 'PSU%'
+  OR COMMENTS LIKE 'BP%'
+  OR COMMENTS LIKE '%DATABASE PATCH SET UPDATE%'
+  OR COMMENTS LIKE 'BP%' ;
 select * into :BP from (select COMMENTS from  registry$history order by action_time DESC) where rownum=1;
 -- 11.2
  IF ( :EXTENDVERSION = '11.2.0.4.0' AND :EXIST > 0 AND :BP not like '%BP%') THEN 
