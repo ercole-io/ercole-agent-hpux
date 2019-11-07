@@ -23,7 +23,7 @@ use diagnostics;
 use lib "./marshal";
 use common;
 
-sub Patches {
+sub Features2 {
     no warnings 'uninitialized';
     my $cmdOutput = shift;
     my @features;
