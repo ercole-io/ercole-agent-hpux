@@ -84,17 +84,7 @@ sub buildData { #OK
 
         if ($dbStatus =~ m/OPEN/) {
 			my $outVersion = fetcher("dbversion", $dbEntry{"DBName"}, $dbEntry{"OracleHome"}); #$db=XE, #outVersion 18.0.0.0
-            my $prefix = substr $outVersion, 0, 2; 
-			
-			my $dbVersion = "12";
-
-			if ($prefix eq "11"){
-				$dbVersion = "11";
-			} elsif($prefix eq "10"){
-				$dbVersion = "10";
-			} elsif($prefix eq "9"){
-				$dbVersion = "9";
-			}
+        	my ($dbVersion) = split /\./, $outVersion;
 		
 			#DA RIMETTERE ALLA FINE
 			# if ($configuration{'forcestats'}) { #true, ok
