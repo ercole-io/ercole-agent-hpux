@@ -84,15 +84,15 @@ sub Database {
         $db{'Dataguard'} = parseBool($dataguard);
 
         #empty fields
-        $db{'Patches'}=();
-        $db{'Tablespaces'}=();
-        $db{'Schemas'}=();
-        $db{'Features'}=();
-        $db{'Licenses'}=();
-        $db{'ADDMs'}=();
-        $db{'SegmentAdvisors'}=();
-        $db{'LastPSUs'}=();
-        $db{'Backups'}=();
+        $db{'Patches'}=[];
+        $db{'Tablespaces'}=[];
+        $db{'Schemas'}=[];
+        $db{'Features'}=[];
+        $db{'Licenses'}=[];
+        $db{'ADDMs'}=[];
+        $db{'SegmentAdvisors'}=[];
+        $db{'LastPSUs'}=[];
+        $db{'Backups'}=[];
     }
 
     return %db;
