@@ -34,7 +34,7 @@ sub Database {
         my ($name, $uniqueName, $instanceNumber, $status, $version, 
             $platform, $archiveLog, $charset, $ncharset, $blockSize, 
             $cpuCount, $sgaTarget, $pgaTarget, $memoryTaget, $sgaMaxSize, 
-            $segmentsSize, $used, $allocated, $elapsed, $dbtime, $work, $asm, $dataguard) = split /\|\|\|/, $line;
+            $segmentsSize, $used, $allocated, $elapsed, $dbtime, $dailycpuusage, $work, $asm, $dataguard) = split /\|\|\|/, $line;
         $name=trim($name);
         $uniqueName=trim($uniqueName);
         $instanceNumber=trim($instanceNumber);
@@ -54,6 +54,7 @@ sub Database {
         $used=trim($used);
         $allocated=trim($allocated);
         $elapsed=trim($elapsed);
+        $dailycpuusage=trim($dailycpuusage);
         $dbtime=trim($dbtime);
         $work=trim($work);
         $asm=trim($asm);
@@ -79,9 +80,13 @@ sub Database {
         $db{'Allocated'} = $allocated;
         $db{'Elapsed'} = $elapsed;
         $db{'DBTime'} = $dbtime;
+        $db{'DailyCPUUsage'} = $dailycpuusage;
         $db{'Work'} = $work;
         $db{'ASM'} = parseBool($asm);
         $db{'Dataguard'} = parseBool($dataguard);
+	    if ($dailycpuusage eq '') {
+		    $db{'DailyCPUUsage'} = $work;
+    	}
 
         #empty fields
         $db{'Patches'}=[];
