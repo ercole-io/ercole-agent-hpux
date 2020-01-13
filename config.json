@@ -8,5 +8,6 @@
     "frequency": 24,
     "forcestats": true,
     "EnableServerValidation": false,
-    "oratab": "/etc/oratab"
+    "oratab": "/etc/oratab",
+    "AWR": 30
 }
