@@ -91,7 +91,7 @@ sub buildData { #OK
 			# 	fetcher("stats", $db, $dbVersion); #Update db stats
 			# }
 
-			$out = fetcher("db", $dbEntry{"DBName"}, $dbEntry{"OracleHome"}); 
+			$out = fetcher("db", $dbEntry{"DBName"}, $dbEntry{"OracleHome"}, $configuration{'AWR'});
 			my %database = marshal::Database($out); #OK 
 
 			$out = fetcher("tablespace", $dbEntry{"DBName"}, $dbEntry{"OracleHome"});
