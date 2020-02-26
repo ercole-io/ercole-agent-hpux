@@ -37,7 +37,7 @@ sub Features {
         $key=trim($key);
         $value=trim($value);
         $feature{'Name'} = $key;
-        $feature{'Status'} = marshal::parseBool();
+        $feature{'Status'} = parseBool($value);
         push(@features, {%feature});
     }
 
