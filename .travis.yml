@@ -8,9 +8,9 @@ before_install:
   - if [ -z ${TRAVIS_TAG} ] || [ ${TRAVIS_TAG} == *-* ]; then export VERSION=latest; else export VERSION=${TRAVIS_TAG}; fi
   - echo ${TRAVIS_TAG}
   - echo ${VERSION}
-  - mkdir /tmp/dist
+
 install:
-  -
+  - mkdir /tmp/dist
 
 script:
   - sed "s/\"latest\"/\"${VERSION}\"/" ercole-agent > /tmp/ercole-agent
