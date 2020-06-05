@@ -16,21 +16,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 SID=$1
+HOME=$2
 
 if [ -z "$SID" ]; then
   echo "Missing SID parameter"
   exit 1
 fi
-
-DBV=$2
-
-if [ -z "$DBV" ]; then
-  echo "Missing DBV parameter"
-  exit 1
-fi
-
-HOME=$3
-
 if [ -z "$HOME" ]; then
   echo "Missing ORACLE_HOME parameter"
   exit 1
@@ -44,23 +35,4 @@ export ORACLE_SID=$SID
 export ORACLE_HOME=$HOME
 export PATH=$HOME/bin:$PATH
 
-DB_NAME=$(sqlplus -S / as sysdba << EOF
-set pages 0 feedback off
-select name from v\$database;
-exit
-EOF
-)
-
-
-DB_ONE=x$(sqlplus -S / as sysdba << EOF
-set pages 0 feedback off
-HOST srvctl config database -d $DB_NAME |grep -i One
-exit
-EOF
-)
-
-if [ $DBV == "9" ] ||  [ $DBV == "10" ]; then
-  sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/feature-10.sql
-else
-  sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/feature.sql $DB_ONE
-fi
+sqlplus -S "/ AS SYSDBA" @${ERCOLE_HOME}/sql/checkpdb.sql 
