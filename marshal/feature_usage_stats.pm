@@ -23,7 +23,7 @@ use diagnostics;
 use lib "./marshal";
 use common;
 
-sub Features2 {
+sub FeatureUsageStats {
     no warnings 'uninitialized';
     my $cmdOutput = shift;
     my @features;
@@ -34,10 +34,12 @@ sub Features2 {
         my ($product, $feature, $detectedUsages, $currentlyUsed, $firstUsageDate, $lastUsageDate, $extraFeatureInfo) = split /\|\|\|/, $line;
         $product=trim($product);
         $feature=trim($feature);
-        $detectedUsages=trim($detectedUsages);
-        $currentlyUsed=trim($currentlyUsed);
-        $firstUsageDate=trim($firstUsageDate);
-        $lastUsageDate=trim($lastUsageDate);
+        $detectedUsages=parseInt(trim($detectedUsages));
+        $currentlyUsed=parseBool(trim($currentlyUsed));
+        $firstUsageDate = trim($firstUsageDate);
+        $firstUsageDate =~ s/(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)/$1-$2-$3T$4:$5:$6Z/g; 
+        $lastUsageDate = trim($lastUsageDate);
+        $lastUsageDate =~ s/(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)/$1-$2-$3T$4:$5:$6Z/g; 
         $extraFeatureInfo=trim($extraFeatureInfo);
 
         $feature{'Product'} = $product;

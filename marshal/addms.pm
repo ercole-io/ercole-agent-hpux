@@ -33,11 +33,11 @@ sub Addms {
     for my $c (split /\n/, $cmdOutput) {
         my %addm;
         my $line = $c;
-        my ($hostname, $instance_name, $finding, $recommendation, $action, $benefit) = split /\|\|\|/, $line;
+        my (undef, undef, $finding, $recommendation, $action, $benefit) = split /\|\|\|/, $line;
         $finding=trim($finding);
         $recommendation=trim($recommendation);
         $action=trim($action);
-        $benefit=trim($benefit);
+        $benefit=parseNumber(trim($benefit));
         $addm{'Finding'} = $finding;
         $addm{'Recommendation'} = $recommendation;
         $addm{'Action'} = $action;

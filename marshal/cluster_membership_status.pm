@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright (c) 2019 Sorint.lab S.p.A.
+# Copyright (c) 2020 Sorint.lab S.p.A.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,34 +23,31 @@ use diagnostics;
 use lib "./marshal";
 use common;
 
-# Tablespaces returns information about database tablespaces extracted
-# from the tablespaces fetcher command output.
-sub Tablespaces {
+#ClusterMembershipStatus returns a ClusterMembershipStatus struct from the output of the host
+#fetcher command. Host fields output is in key: value format separated by a newline
+sub ClusterMembershipStatus {
     no warnings 'uninitialized';
     my $cmdOutput = shift;
-    my @tablespaces;
+    my %cms;
 
     for my $c (split /\n/, $cmdOutput) {
-        my %tablespace;
         my $line = $c;
-        my (undef, undef, undef, $name, $maxSize, $total, $used, $usedPerc, $status) = split /\|\|\|/, $line;
-        $name=trim($name);
-        $maxSize=parseNumber(trim($maxSize));
-        $total=parseNumber(trim($total));
-        $used=parseNumber(trim($used));
-        $usedPerc=parseNumber(trim($usedPerc));
-        $status=trim($status);
-        $tablespace{'Name'} = $name;
-        $tablespace{'MaxSize'} = $maxSize;
-        $tablespace{'Total'} = $total;
-        $tablespace{'Used'} = $used;
-        $tablespace{'UsedPerc'} = $usedPerc;
-        $tablespace{'Status'} = $status;
-
-        push(@tablespaces, {%tablespace});
+        my ($key, $value) = split /:/, $line;
+        $key=trim($key);
+        $key =~ s{(\w+)}{\u\L$1}g;
+        if ($key eq "Oraclecluster"){
+            $cms{"OracleClusterware"} = parseBool(trim($value));
+        } elsif ($key eq "Veritascluster"){
+            $cms{"VeritasClusterServer"} = parseBool(trim($value));
+        } elsif ($key eq "Suncluster"){
+            $cms{"SunCluster"} = parseBool(trim($value));
+        } elsif ($key eq "Aixcluster"){
+            $cms{"HACMP"} = parseBool(trim($value));
+        } 
+        $value=trim($value);
     }
 
-    return \@tablespaces;
+    return %cms;
 }
 
 1;
