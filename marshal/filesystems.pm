@@ -37,13 +37,12 @@ sub Filesystems {
         my $line = $c;
         $line = join(" ", split(' ', $line));
         my ($filesystem, $fstype, $size, $used, $available, $usedperc, $mountedon) = split (' ', $line);
-        $lines.= marshalKey("Filesystem").marshalString(trim($filesystem)).", ";
-        $lines.= marshalKey("FsType").marshalString(trim($fstype)).", ";
-        $lines.= marshalKey("Size").marshalString(trim($size)).", ";
-        $lines.= marshalKey("Used").marshalString(trim($used)).", ";
-        $lines.= marshalKey("Available").marshalString(trim($available)).", ";
-        $lines.= marshalKey("UsedPerc").marshalString(trim($usedperc)).", ";
-        $lines.= marshalKey("MountedOn").marshalString(trim($mountedon)).", ";
+        $lines.= marshalKey("filesystem").marshalString(trim($filesystem)).", ";
+        $lines.= marshalKey("type").marshalString(trim($fstype)).", ";
+        $lines.= marshalKey("size").marshalValue(trim($size)).", ";
+        $lines.= marshalKey("usedSpace").marshalValue(trim($used)).", ";
+        $lines.= marshalKey("availableSpace").marshalValue(trim($available)).", ";
+        $lines.= marshalKey("mountedOn").marshalString(trim($mountedon)).", ";
         $lines.= "}\n";
     }
     
