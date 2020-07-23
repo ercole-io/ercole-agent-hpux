@@ -160,7 +160,6 @@ sub buildData { #OK
 
 	my %hostData;
 	
-	my %db;
 	$db{"databases"} = \@databases;
 	my %oracle;
 	$oracle{"database"} = \%db;
